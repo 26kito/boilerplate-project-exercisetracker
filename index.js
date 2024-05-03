@@ -31,17 +31,15 @@ app.post('/api/users', async (req, res) => {
   const checkUsnavailability = await users.findOne({ username: usnInput })
 
   if (!checkUsnavailability && usnInput) {
-    users.insertOne({ username: usnInput })
-
-    const getUser = await users.findOne({ username: usnInput })
+    const insert = await users.insertOne({ username: usnInput })
 
     return res.json({
-      username: getUser.username,
-      id: getUser._id
+      username: usnInput,
+      id: new ObjectId(insert.insertedId)
     })
   }
 
-  res.json({
+  return res.json({
     message: 'Failed to create user!'
   })
 })
